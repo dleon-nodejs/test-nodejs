@@ -1,0 +1,35 @@
+config:
+  packageIndividually: false
+  profile: ''
+  domain:
+    url: 'factor-api.mobly-local.com.br'
+    certificate: '*.mobly-local.com.br'
+    enabled: true
+
+newRelic:
+  stages:
+    - prod
+
+vpc:
+  securityGroupIds: ''
+  subnetIds: ''
+
+
+resourceArn:
+  DOCUMENTS_BUCKET_ARN: '*'
+  DB_SECRET_NAME_ARN: '*'
+
+
+environment:
+  POWERTOOLS_IGNORE_ERRORS: true
+  DB_URI_LOCAL: mysql2://root:@localhost:3306/factory
+  DB_ENGINE_LOCAL: mysql
+  STAGE: ${self:custom.stage}
+  NEW_RELIC_NO_CONFIG_FILE: true
+  SERVERLESS_SERVICE: ${self:service}
+  NEW_RELIC_APP_NAME: ${self:service}-${self:custom.stage}
+  FACTORY_USER_URL: http://localhost:7000/user
+  DB_SECRET_NAME: /rds/aurora/factory-core
+  DB_NAME: factory
+  DOCUMENTS_BUCKET: mobly-dev-${self:provider.region}-factory-core-infra-uploads
+

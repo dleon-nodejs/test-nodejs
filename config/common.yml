@@ -1,0 +1,23 @@
+tags:
+  departament: TI
+  project: factory-core
+  service: ${self:service}
+  environment: ${self:custom.stage}
+  SQUAD: FACTORY
+
+iamRoleStatements:
+  - Effect: 'Allow'
+    Resource: '*'
+    Action:
+      - ec2:CreateNetworkInterface
+      - ec2:DescribeNetworkInterfaces
+      - ec2:DetachNetworkInterface
+      - ec2:DeleteNetworkInterface
+      - ec2:DescribeSecurityGroups
+      - ec2:DescribeSubnets
+      - ec2:DescribeVpcs
+  - Effect: 'Allow'
+    Action:
+      - 'secretsmanager:GetSecretValue'
+    Resource: ${file(config/${self:custom.stage}.yml):resourceArn.DB_SECRET_NAME_ARN}
+

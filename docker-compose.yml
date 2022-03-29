@@ -1,0 +1,14 @@
+version: '3.3'
+services:
+  db-factory:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'factory'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - ~/mysql-volume/factory-core:/var/lib/mysql

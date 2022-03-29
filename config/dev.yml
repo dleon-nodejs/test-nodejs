@@ -1,0 +1,35 @@
+config:
+  packageIndividually: false
+  profile: mobly-${self:custom.stage}
+  domain:
+    url: "factory-api.mobly-dev.com.br"
+    certificate: "*.mobly-dev.com.br"
+    enabled: true
+
+newRelic:
+  accountId: ${ssm:/${self:custom.stage}/new-relic-id}
+  cloudWatchFilter: '*'
+  exclude:
+    - warmUpPlugin
+
+vpc:
+  securityGroupIds:
+    - ${ssm:/${self:custom.stage}/vpc/security-group/default}
+  subnetIds:
+    - ${ssm:/${self:custom.stage}/vpc/subnets/private/a}
+    - ${ssm:/${self:custom.stage}/vpc/subnets/private/b}
+
+resourceArn:
+  DOCUMENTS_BUCKET_ARN: ${cf:${self:service}-infra-${self:custom.stage}.S3UploadArn, 'could_not_pick'}
+  DB_SECRET_NAME_ARN: ${ssm:/${self:custom.stage}/factory-services/core/secretDbArn}
+
+environment:
+  STAGE: ${self:custom.stage}
+  NEW_RELIC_NO_CONFIG_FILE: true
+  SERVERLESS_SERVICE: ${self:service}
+  NEW_RELIC_APP_NAME: ${self:service}-${self:custom.stage}
+  FACTORY_USER_URL: ${ssm:/${self:custom.stage}/factory-services/user/url}
+  DB_SECRET_NAME: /rds/aurora/factory-core
+  DB_NAME: factory
+  DOCUMENTS_BUCKET: ${cf:${self:service}-infra-${self:custom.stage}.S3Upload, 'could_not_pick'}
+

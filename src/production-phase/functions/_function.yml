@@ -1,0 +1,39 @@
+productionPhaseCreate:
+  handler: src/production-phase/functions/create.handler
+  events:
+    - http:
+        method: post
+        path: production-phase
+        cors: true
+
+productionPhaseList:
+  handler: src/production-phase/functions/list.handler
+  events:
+    - http:
+        method: get
+        path: production-phase
+        cors: true
+
+productionPhaseGetById:
+  handler: src/production-phase/functions/get-id.handler
+  events:
+    - http:
+        method: get
+        path: production-phase/{id}
+        cors: true
+
+productionPhaseUpdate:
+  handler: src/production-phase/functions/update.handler
+  events:
+    - http:
+        method: put
+        path: production-phase/{id}
+        cors: true
+
+productionPhaseChangeStatus:
+  handler: src/production-phase/functions/change-status.handler
+  events:
+    - http:
+        method: patch
+        path: production-phase/{id}/status
+        cors: true

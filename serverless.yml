@@ -1,0 +1,92 @@
+service: factory-core
+frameworkVersion: '2'
+variablesResolutionMode: 20210326
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ${opt:region, 'us-east-1'}
+  profile: ${file(config/${self:custom.stage}.yml):config.profile}
+  memorySize: 256
+  timeout: 30
+  stackTags: ${file(config/common.yml):tags}
+  tags: ${file(config/common.yml):tags}
+  stage: local
+  environment: ${file(config/${self:custom.stage}.yml):environment}
+  deploymentBucket:
+    name: mobly.${self:custom.stage}.serverless.${self:provider.region}.deploys
+  lambdaHashingVersion: 20201221
+  iam:
+    role:
+      statements:
+        - ${file(config/common.yml):iamRoleStatements.0}
+        - ${file(config/common.yml):iamRoleStatements.1}
+
+  vpc: ${file(config/${self:custom.stage}.yml):vpc}
+
+
+plugins:
+  - serverless-webpack
+  - serverless-api-gateway-throttling
+  - serverless-iam-roles-per-function
+  - serverless-newrelic-lambda-layers
+  - serverless-domain-manager
+  - serverless-plugin-split-stacks
+  - serverless-plugin-warmup
+  - serverless-offline
+  - serverless-apigw-binary
+
+package:
+  patterns:
+    - 'node_modules/mysql2/**'
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  apigwBinary:
+    types:
+      - 'multipart/form-data'
+
+  serverless-offline:
+    noPrependStageInUrl: true
+    prefix: core
+    httpPort: 7100
+
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+    packagerOptions:
+      scripts:
+        - rm -rf node_modules/aws-sdk
+
+  newRelic: ${file(config/${self:custom.stage}.yml):newRelic}
+
+  splitStacks:
+    perFunction: true
+
+  warmup:
+    default:
+      enabled:
+        - staging
+        - prod
+      cleanFolder: false
+      name: '${self:service}-${self:custom.stage}-warmup-lambdas'
+      timeout: 5
+      prewarm: true
+
+  customDomain:
+    enabled: ${file(config/${self:custom.stage}.yml):config.domain.enabled}
+    domainName: ${file(config/${self:custom.stage}.yml):config.domain.url}
+    stage: ${self:custom.stage}
+    basePath: core
+    certificateName: ${file(config/${self:custom.stage}.yml):config.domain.certificate}
+    createRoute53Record: true
+    securityPolicy: tls_1_2
+
+functions:
+  - ${file(src/purchase-unit/functions/_function.yml)}
+  - ${file(src/document-upload/functions/_function.yml)}
+  - ${file(src/production-phase/functions/_function.yml)}
+  - ${file(src/buyer/functions/_function.yml)}
+  - ${file(src/category/functions/_function.yml)}
+  - ${file(src/material/functions/_function.yml)}
+  - ${file(src/provider/functions/_function.yml)}

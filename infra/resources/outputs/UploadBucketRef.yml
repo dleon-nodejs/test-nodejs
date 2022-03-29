@@ -1,0 +1,3 @@
+Description: 'Buckets com arquivos de upload do factory'
+Value:
+  Ref: S3Upload

@@ -1,0 +1,55 @@
+materialCreate:
+  handler: src/material/functions/create.handler
+  events:
+    - http:
+        method: post
+        path: material
+        cors: true
+
+materialList:
+  handler: src/material/functions/list.handler
+  events:
+    - http:
+        method: get
+        path: material
+        cors: true
+
+materialById:
+  handler: src/material/functions/get-id.handler
+  events:
+    - http:
+        method: get
+        path: material/{id}
+        cors: true
+
+materialUpdate:
+  handler: src/material/functions/update.handler
+  events:
+    - http:
+        method: put
+        path: material/{id}
+        cors: true
+
+materialChangeStatus:
+  handler: src/material/functions/change-status.handler
+  events:
+    - http:
+        method: patch
+        path: material/{id}/status
+        cors: true
+
+materialComplement:
+  handler: src/material/functions/complement.handler
+  events:
+    - http:
+        method: get
+        path: material/complement
+        cors: true
+
+materialChangePrice:
+  handler: src/material/functions/change-price.handler
+  events:
+    - http:
+        method: patch
+        path: material/{id}/price
+        cors: true

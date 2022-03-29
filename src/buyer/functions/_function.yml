@@ -1,0 +1,39 @@
+buyerCreate:
+  handler: src/buyer/functions/create.handler
+  events:
+    - http:
+        method: post
+        path: buyer
+        cors: true
+
+buyerList:
+  handler: src/buyer/functions/list.handler
+  events:
+    - http:
+        method: get
+        path: buyer
+        cors: true
+
+buyerById:
+  handler: src/buyer/functions/get-id.handler
+  events:
+    - http:
+        method: get
+        path: buyer/{id}
+        cors: true
+
+buyerUpdate:
+  handler: src/buyer/functions/update.handler
+  events:
+    - http:
+        method: put
+        path: buyer/{id}
+        cors: true
+
+buyerChangeStatus:
+  handler: src/buyer/functions/change-status.handler
+  events:
+    - http:
+        method: patch
+        path: buyer/{id}/status
+        cors: true

@@ -1,0 +1,15 @@
+#JEST
+jest.config.js
+
+#WEBPACK
+webpack.config.js
+
+#TYPESCRIPT
+tsconfig.json
+tsconfig.paths.json
+
+#split-stack
+stacks-map.js
+
+#typeorm
+ormconfig.js

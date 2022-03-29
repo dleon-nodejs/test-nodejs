@@ -1,0 +1,5 @@
+Description: "ARN Bucket de uploads do factory"
+Value:
+  Fn::GetAtt:
+    - S3Upload
+    - Arn

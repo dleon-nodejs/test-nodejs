@@ -1,0 +1,39 @@
+purchaseUnitList:
+  handler: src/purchase-unit/functions/list.handler
+  events:
+    - http:
+        method: get
+        path: purchase-unit
+        cors: true
+
+purchaseUnitCreate:
+  handler: src/purchase-unit/functions/create.handler
+  events:
+    - http:
+        method: post
+        path: purchase-unit
+        cors: true
+
+purchaseUnitUpdate:
+  handler: src/purchase-unit/functions/update.handler
+  events:
+    - http:
+        method: put
+        path: purchase-unit/{id}
+        cors: true
+
+purchaseUnitChangeStatus:
+  handler: src/purchase-unit/functions/change-status.handler
+  events:
+    - http:
+        method: patch
+        path: purchase-unit/{id}/status
+        cors: true
+
+purchaseUnitById:
+  handler: src/purchase-unit/functions/get-id.handler
+  events:
+    - http:
+        method: get
+        path: purchase-unit/{id}
+        cors: true

@@ -1,0 +1,15 @@
+- nomes/estrutura  (done)
+ - por modulos
+
+reaproveita codigo (done)
+ - services
+ - não separa os services em varios arquivos
+
+reaproveita fixture
+definir oq e util
+testes
+cadastro unidade de compra
+authorizer nas eventos http
+paginacao
+documentacao
+permissoes s3 e secretManager

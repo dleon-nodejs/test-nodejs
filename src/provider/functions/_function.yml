@@ -1,0 +1,31 @@
+providerCreate:
+  handler: src/provider/functions/create.handler
+  events:
+    - http:
+        method: post
+        path: provider
+        cors: true
+
+providerById:
+  handler: src/provider/functions/get-id.handler
+  events:
+    - http:
+        method: get
+        path: provider/{id}
+        cors: true
+
+providerUnitList:
+  handler: src/provider/functions/list.handler
+  events:
+    - http:
+        method: get
+        path: provider
+        cors: true
+
+providerChangeStatus:
+  handler: src/provider/functions/change-status.handler
+  events:
+    - http:
+        method: patch
+        path: provider/{id}/status
+        cors: true

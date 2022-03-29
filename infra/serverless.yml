@@ -1,0 +1,27 @@
+service: ${file(../serverless.yml):service, 'service'}-infra
+frameworkVersion: '2'
+variablesResolutionMode: 20210326
+
+projectDir: ../
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: local
+  lambdaHashingVersion: 20201221
+  region: ${opt:region, 'us-east-1'}
+  stackTags: ${file(../config/common.yml):tags}
+  tags: ${file(../config/common.yml):tags}
+  environment: ${file(../config/${self:custom.stage}.yml):environment}
+  deploymentBucket:
+    name: mobly.${self:custom.stage}.serverless.${self:provider.region}.deploys
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+
+resources:
+  Resources:
+    S3Upload: ${file(./resources/s3/UploadBucket.yml)}
+  Outputs:
+    S3Upload: ${file(./resources/outputs/UploadBucketRef.yml)}
+    S3UploadArn: ${file(./resources/outputs/UploadBucketArn.yml)}

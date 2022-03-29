@@ -1,0 +1,55 @@
+documentUploadList:
+  handler: src/document-upload/functions/list.handler
+  events:
+    - http:
+        method: get
+        path: documents/{uploadType}
+        cors: true
+
+documentUpload:
+  handler: src/document-upload/functions/upload.handler
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Resource:
+        Fn::Join:
+          - ''
+          - - ${file(config/${self:custom.stage}.yml):resourceArn.DOCUMENTS_BUCKET_ARN}
+            - '/*'
+      Action:
+        - s3:PutObject
+        - s3:PutObjectAcl
+  events:
+    - http:
+        method: post
+        path: documents/upload/{uploadType}
+        cors: true
+
+documentUploadProcess:
+  handler: src/document-upload/functions/process.handler
+  timeout: 300
+  memorySize: 512
+  iamRoleStatementsInherit: true
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Resource:
+        Fn::Join:
+          - ''
+          - - ${file(config/${self:custom.stage}.yml):resourceArn.DOCUMENTS_BUCKET_ARN}
+            - '/*'
+      Action:
+        - s3:GetObject
+  events:
+    - s3:
+        bucket: ${self:provider.environment.DOCUMENTS_BUCKET}
+        event: s3:ObjectCreated:*
+        rules:
+          - suffix: .csv
+        existing: true
+
+documentUploadDownload:
+  handler: src/document-upload/functions/download.handler
+  events:
+    - http:
+        method: get
+        path: documents/{uploadType}/csv
+        cors: true

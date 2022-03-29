@@ -1,0 +1,39 @@
+categoryCreate:
+  handler: src/category/functions/create.handler
+  events:
+    - http:
+        method: post
+        path: category
+        cors: true
+
+categoryList:
+  handler: src/category/functions/list.handler
+  events:
+    - http:
+        method: get
+        path: category
+        cors: true
+
+categoryById:
+  handler: src/category/functions/get-id.handler
+  events:
+    - http:
+        method: get
+        path: category/{id}
+        cors: true
+
+categoryUpdate:
+  handler: src/category/functions/update.handler
+  events:
+    - http:
+        method: put
+        path: category/{id}
+        cors: true
+
+categoryChangeStatus:
+  handler: src/category/functions/change-status.handler
+  events:
+    - http:
+        method: patch
+        path: category/{id}/status
+        cors: true

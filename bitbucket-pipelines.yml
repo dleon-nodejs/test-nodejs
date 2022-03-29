@@ -1,0 +1,52 @@
+image: node:14-stretch
+
+options:
+  size: 2x
+
+definitions:
+  steps:
+    - step: &build-test
+        name: Build and test
+        caches:
+          - node
+        script:
+          - yarn -v
+          - yarn
+          - yarn eslint src
+          - yarn prettier --check src
+          - yarn test --coverage
+    - step: &deploy
+        name: Deploy
+        deployment: test
+        caches:
+          - node
+        script:
+          - yarn -v
+          - npm i -g serverless@2.49.0
+          - sls -v
+          - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.0.30.zip" -o "awscliv2.zip"
+          - unzip awscliv2.zip
+          - ./aws/install
+          - export PROFILE=mobly-$STAGE
+          - yarn install
+          - yarn aws:credentials:config
+          # - cd infra
+          # - sls deploy --stage $STAGE -v
+          # - cd ..
+          - sls deploy --stage $STAGE -v
+
+pipelines:
+  pull-requests:
+    '**':
+      - step: *build-test
+  branches:
+    dev:
+      - step: *deploy
+    staging:
+      - step:
+          <<: *deploy
+          deployment: staging
+    main:
+      - step:
+          <<: *deploy
+          deployment: production
